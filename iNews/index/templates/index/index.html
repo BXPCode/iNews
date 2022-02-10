@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block info %}
+    <div class="post_gallary_area fifth_bg mb40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-xl-8">
+                            {#轮播图：展示热门新闻#}
+                            <div class="slider_demo2">
+                                {% for news in news_hot %}
+                                    <div class="single_post post_type6 xs-mb30">
+                                        <div class="post_img gradient1">
+                                            <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="">
+                                        </div>
+                                        <div class="single_post_text">
+                                            <div class="meta meta_separator1"><a href="#">{{ news.author }}</a>
+                                                <a>{{ news.create_time }}</a>
+                                            </div>
+                                            <h4><a class=""
+                                                   href="/content?news_id={{ news.id }}">{{ news.title }}</a>
+                                            </h4>
+                                            <div class="space-10"></div>
+                                            <p class="post-p">{{ news.abstract }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {#轮播图滑块#}
+                            <div class="slider_demo1">
+                                {% for news in news_hot %}
+                                    <div class="single_gallary_item">
+                                        <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="image">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="space-40"></div>
+                            {#协同过滤推荐部分展示#}
+                            <div class="businerss_news">
+                                <div class="row">
+                                    <div class="col-12 align-self-center">
+                                        <div class="categories_title">
+                                            <h5>iNews <a>为您推荐</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        {#分页展示#}
+                                        {% for news in c_page %}
+                                            <div class="single_post post_type3 post_type12 mb30">
+                                                <div class="post_img">
+                                                    <div class="img_wrap">
+                                                        <a href="/content?news_id={{ news.id }}">
+                                                            <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="图像加载失败">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="single_post_text">
+                                                    <div class="meta3"><a>{{ news.author }}</a>
+                                                        <a>{{ news.create_time }}</a>
+                                                    </div>
+                                                    <h4>
+                                                        <a href="/content?news_id={{ news.id }}">{{ news.title }}</a>
+                                                    </h4>
+                                                    <div class="space-10"></div>
+                                                    <p class="post-p">{{ news.abstract }}</p>
+                                                    <div class="space-20"></div>
+                                                    <a href="/content?news_id={{ news.id }}" class="readmore">Read
+                                                        more</a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {#翻页页码#}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="cpagination padding5050">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                {% if c_page.has_previous %}
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="/?page={{ c_page.previous_page_number }}"
+                                                           aria-label="Previous"> <span
+                                                                aria-hidden="true"><i
+                                                                class="fas fa-caret-left"></i></span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% for p_num in paginator.page_range %}
+                                                    {% if p_num == c_page.number %}
+                                                        <li class="page-item"><a class="page-item"
+                                                                                 href="javascript:return false;"
+                                                                                 onclick="return false;"
+                                                                                 style="opacity: 0.2">{{ p_num }}</a>
+                                                        </li>
+                                                    {% else %}
+                                                        <li class="page-item"><a class="page-link"
+                                                                                 href="/?page={{ p_num }}">{{ p_num }}</a>
+                                                        </li>
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                                {% if c_page.has_next %}
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="/?page={{ c_page.next_page_number }}"
+                                                           aria-label="Next"> <span
+                                                                aria-hidden="true"><i
+                                                                class="fas fa-caret-right"></i></span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {#基于标签的推荐、最热新闻、最新新闻#}
+                        <div class="col-xl-4">
+                            <div class="widget_tab md-mt-30">
+                                <ul class="nav nav-tabs">
+                                    <li><a class="active" data-toggle="tab" href="#post1">猜你喜欢</a>
+                                    </li>
+                                    <li><a data-toggle="tab" href="#post2">最热文章</a>
+                                    </li>
+                                    <li><a data-toggle="tab" href="#post3">最新文章</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="post1" class="tab-pane fade show in active">
+                                        {% for news in news_your_tag %}
+                                            <div class="widget tab_widgets mb30">
+                                                <div class="single_post widgets_small">
+                                                    <div class="post_img">
+                                                        <div class="img_wrap">
+                                                            <a href="/content?news_id={{ news.id }}">
+                                                                <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single_post_text">
+                                                        <div class="meta2 meta_separator1"><a>{{ news.author }}</a>
+                                                            <a>{{ news.create_time }}</a>
+                                                        </div>
+                                                        <h4>
+                                                            <a href="/content?news_id={{ news.id }}">{{ news.title }}</a>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                                <div class="space-15"></div>
+                                                <div class="border_black"></div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div id="post2" class="tab-pane fade">
+                                        {% for news in news_hot %}
+                                            <div class="widget tab_widgets mb30">
+                                                <div class="single_post widgets_small">
+                                                    <div class="post_img">
+                                                        <div class="img_wrap">
+                                                            <a href="/content?news_id={{ news.id }}">
+                                                                <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single_post_text">
+                                                        <div class="meta2 meta_separator1"><a>{{ news.author }}</a>
+                                                            <a>{{ news.create_time }}</a>
+                                                        </div>
+                                                        <h4>
+                                                            <a href="/content?news_id={{ news.id }}">{{ news.title }}</a>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                                <div class="space-15"></div>
+                                                <div class="border_black"></div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div id="post3" class="tab-pane fade">
+                                        {% for news in news_recent %}
+                                            <div class="widget tab_widgets mb30">
+                                                <div class="single_post widgets_small">
+                                                    <div class="post_img">
+                                                        <div class="img_wrap">
+                                                            <a href="/content?news_id={{ news.id }}">
+                                                                <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single_post_text">
+                                                        <div class="meta2 meta_separator1"><a>{{ news.author }}</a>
+                                                            <a>{{ news.create_time }}</a>
+                                                        </div>
+                                                        <h4>
+                                                            <a href="/content?news_id={{ news.id }}">{{ news.title }}</a>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                                <div class="space-15"></div>
+                                                <div class="border_black"></div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

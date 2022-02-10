@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block info %}
+    <div class="archives post post1 padding-top-30">
+        <div class="container">
+            <div class="space-30"></div>
+            <div class="row">
+                {#新闻内容#}
+                <div class="col-md-6 col-lg-8">
+                    <div class="single_post_heading">
+                        <h1>{{ news.title }}</h1>
+                    </div>
+                    <div class="space-20"></div>
+                    <div class="row">
+                        <div class="col-md-6 align-self-center">
+                            <div class="author">
+                                <div class="author_img">
+                                    <div class="author_img_wrap">
+                                        <img src="{% static 'img/author/newsa.png' %} " alt="">
+                                    </div>
+                                </div>
+                                <a>{{ news.author }}</a>
+                                <ul>
+                                    <li><a>{{ news.create_time }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-30"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page_comments">
+                                <ul class="inline">
+                                    <li class="page_category">{{ news.cate_id.name }}</li>
+                                    <li><i class="fas fa-eye">{{ news.read_num }}</i></li>
+                                    <li><i class="fas fa-fire"></i>{{ news.vote_num }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-20"></div>
+                    <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="image">
+                    <div class="space-20"></div>
+                    <p>{{ news.content }}
+                    </p>
+                    <div class="space-40"></div>
+                    <div class="tags">
+                        <ul class="inline">
+                            <li class="tag_list"><i class="fas fa-tag"></i> 标签</li>
+                            {% for tag in tags %}
+                                <li><a>{{ tag.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="space-40"></div>
+                </div>
+                <div class="border_black"></div>
+                {#相似文章#}
+                <div class="col-md-6 col-lg-4">
+                    <div class="widget_tab md-mt-30">
+                        <ul class="nav nav-tabs">
+                            <li><h2 class="widget-title">相似文章</h2></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="post1" class="tab-pane fade in active show">
+                                <div class="border_black"></div>
+                                <div class="widget tab_widgets mb30">
+                                    {% for news in sim_news %}
+                                        <div class="space-15"></div>
+                                        <div class="single_post widgets_small">
+                                            <div class="post_img">
+                                                <div class="img_wrap">
+                                                    <a href="/content?news_id={{ news.id }}">
+                                                        <img src="{{ MEDIA_URL }}{{ news.picture }}" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="single_post_text">
+                                                <div class="meta2 meta_separator1"><a
+                                                        href="/content?news_id={{ news.id }}">{{ news.title }}</a>
+                                                    <a>{{ news.create_time }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-15"></div>
+                                        <div class="border_black"></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space-60"></div>
+
+        <div class="comment_form">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-lg-10 m-auto">
+                        {#点赞#}
+                        <button class="btn btn-danger" onclick="voteChange(this,{{ news.id }})">
+                            {{ vote_content }}
+                        </button>
+                        <div class="space-40"></div>
+                        {#发表评论#}
+                        <form action="/content?news_id={{ news.id }}" method="post">
+                            <div class="row">
+                                <div class="col-12">
+                                    <textarea name="comment" id="messege" cols="30" rows="5"
+                                              placeholder="Tell us about your opinion…"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <input type="submit" value="发表评论" class="cbtn2">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="space-60"></div>
+                {#评论列表#}
+                <div class="comment_list">
+                    <div class="row">
+                        <div class="col-12 col-lg-10 m-auto">
+                            <h3>评论列表</h3>
+                            {% for comment in news_comment %}
+                                <div class="row">
+                                    <div class="single_comment">
+                                        <div class="comment_img">
+                                            <img src="{% static 'img/author/user1.png' %}" alt="">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">{{ comment.user_id.username }}</div>
+                                        </div>
+                                        <div class="space-5"></div>
+                                        <p>{{ comment.comment }}</p>
+                                        <div class="space-15"></div>
+                                        <div class="border_black"></div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="space-15"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space-100"></div>
+    </div>
+{% endblock %}
+
+{#扩展js，ajax异步更新点赞的数据#}
+{% block script_extends %}
+    <script type="text/javascript">
+        var flag={{ is_vote.vote }};
+        function voteChange(obj, news_id) {
+            {#var is_vote = obj.getElementsByClassName('active').length === 0;#}
+            if (flag) {
+                obj.innerHTML = "点赞";
+                flag=!flag;
+            } else {
+                obj.innerHTML = "取消点赞";
+                flag=!flag;
+            }
+            $.ajax({
+                url: '/voteChange',
+                type: 'GET',
+                data: {
+                    news_id: news_id,
+                },
+            });
+        }
+    </script>
+{% endblock %}

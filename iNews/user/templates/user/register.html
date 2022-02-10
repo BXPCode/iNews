@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>注册新用户</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/a3common.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="http://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+     <link rel="stylesheet" href="{% static 'css/font_43459_lbtux0zjkr6yldi.css'%}">
+</head>
+
+<body>
+<div id="main" class="main-warp">
+    <div class="main-content">
+        <div class="formDiv">
+            <h2 class="title text-center">注册</h2>
+            <form id="registerForm" role="form" class="form-horizontal " action="/user/register" method="post">
+                <div class="form-item">
+                    <div class="input-warp">
+                        <span class="input-icon iconfont icon-yonghu1"></span>
+                        <input id="userName" name="username" placeholder="用户名" type="text" class="inputs" value=""/>
+                    </div>
+                    <p id="userNameErr" class="errMsg"></p>
+                </div>
+                <div class="form-item">
+                    <div class="input-warp">
+                        <span class="input-icon iconfont icon-baomi"></span>
+                        <input id="pwd" type="password" placeholder="至少6位字母或数字" maxlength="20" name="password_1"
+                               value="" class="inputs"/>
+                    </div>
+                    <p id="passwordErr" class="errMsg"></p>
+                </div>
+                <div class="form-item">
+                    <div class="input-warp">
+                        <span class="input-icon iconfont icon-baomi"></span>
+                        <input id="repwd" type="password" placeholder="至少6位字母或数字" maxlength="20" name="password_2"
+                               value="" class="inputs"/>
+                    </div>
+                    <p id="passwordErr2" class="errMsg"></p>
+                </div>
+                请选择您感兴趣的标签
+                <div class="form-item">
+                    <ul class="ks-cboxtags">
+                        {% for tag in Tags %}
+                            <li><input type="checkbox" id="checkbox{{ tag.label }}"
+                                       value={{ tag.id }} name="checkbox_list"><label
+                                    for="checkbox{{ tag.label }}">{{ tag.name }}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="btn-warp">
+                    <div class="text-center">
+                        <button type="submit" id="btnSubmit" class="btn lgbtn blue btn-block">注册</button>
+                        <input id="appName" name="appName" type="hidden" value="jsform"/>
+                    </div>
+                </div>
+                <div class="agreement gap">
+                    <div class="text-right">
+                        <div class="pull-left">已有账号，<a href="/user/login" class="link">登录</a></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
